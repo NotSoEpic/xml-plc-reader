@@ -20,14 +20,9 @@ def getTagsList():
 def getRoutineList():
     # loops through every element and adds it if its a routine, in lists based on which routines it is in
     routinesList = []
-    listIndex = -1
     for elem in tree.iter():
-        if elem.tag == "Routines":
-            listIndex += 1
-            routinesList.append(["dummy"])
-            for child in elem:
-                routinesList[listIndex].append(child)
-            del routinesList[listIndex][0]
+        if elem.tag == "Routine":
+            routinesList.append(elem)
     return(routinesList)
 
 def getTagsInAllRoutines(routinesList, tags):
@@ -35,18 +30,17 @@ def getTagsInAllRoutines(routinesList, tags):
     blankList = [0 for _ in range(len(tags))]
     d = {}
     for i in range(len(routinesList)):
-        d[i] = {}
-        d[i] = dict(zip(tagsName, blankList))
-        for j in range(len(routinesList[i])):
-            for child in routinesList[i][j]:
+        d[routinesList[i].attrib["Name"]] = {}
+        d[routinesList[i].attrib["Name"]] = dict(zip(tagsName, blankList))
+        for child in routinesList[i]:
+            for child in child:
                 for child in child:
-                    for child in child:
-                        if child.tag == "Text":
-                            text = multisplit(child.text.replace("\n",""), char_split, "\\")
-                            text = [name for name in text if name.strip()]
-                            for str in text:
-                                if str in tagsName:
-                                    d[i][str] += 1
+                    if child.tag == "Text":
+                        text = multisplit(child.text.replace("\n",""), char_split, "\\")
+                        text = [name for name in text if name.strip()]
+                        for str in text:
+                            if str in tagsName:
+                                d[routinesList[i].attrib["Name"]][str] += 1
     return(d)
     
 
@@ -65,8 +59,8 @@ dic = getTagsInAllRoutines(routines, tags)
 out1.write(str(dic))
 lin = "," + ",".join(tagsName) + "\n"
 for i in range(len(dic)):
-    lin += str(i)
-    for j in range(len(dic[i])):
-        lin += "," + str(dic[i][tagsName[j]])
+    lin += str(routines[i].attrib["Name"])
+    for j in range(len(dic[routines[i].attrib["Name"]])):
+        lin += "," + str(dic[routines[i].attrib["Name"]][tagsName[j]])
     lin += "\n"
 out2.write(lin)

@@ -1,6 +1,6 @@
 Use:
 
-run xml plc reader.exe with the wanted input in the same folder and get output.txt in the format of a python dictionary and output.csv
+run xml plc reader.exe with input.L5X in the same folder and get output.txt in the format of a python dictionary and output.csv
 if you want to use said dictionary in something include this code
 
 import ast

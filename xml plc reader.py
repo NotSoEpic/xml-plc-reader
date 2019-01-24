@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
 tree = ET.parse("input.L5X")
 
-out = open("output.txt","w+")
+out1 = open("output.txt","w+")
+out2 = open("output.csv","w+")
 
 char_split = ["(",")",",",";","[","]","{","}"]
 
@@ -56,6 +57,16 @@ def multisplit(inp, split_list, dummy_char):
     return(inp.split(dummy_char))
 
 tags = getTagsList()
+tagsName = [tags[x].attrib["Name"] for x in range(len(tags))]
 routines = getRoutineList()
 
-out.write(str(getTagsInAllRoutines(routines, tags)))
+dic = getTagsInAllRoutines(routines, tags)
+
+out1.write(str(dic))
+lin = "," + ",".join(tagsName) + "\n"
+for i in range(len(dic)):
+    lin += str(i)
+    for j in range(len(dic[i])):
+        lin += "," + str(dic[i][tagsName[j]])
+    lin += "\n"
+out2.write(lin)
